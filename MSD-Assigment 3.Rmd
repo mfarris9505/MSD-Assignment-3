@@ -1,0 +1,139 @@
+---
+title: "MSD-Assignment-3"
+author: "Matthew Farris"
+date: "July 18, 2015"
+output: html_document
+---
+#MSD - Assignment 1 
+
+####Problem 1: 2.34 Card Game
+
+a. For this problem it is necessary to develop a probablility model, and the following data frame was created: 
+
+```{r} 
+Draw <-c("Red","Spade","Club", "A-Clubs")
+Winings<-c(0,5,10,30)
+Probability <-c(26/52,13/52,12/52,1/52)
+Card_Game <-data.frame(Draw,Winings,Probability)
+Card_Game
+```
+
+```{r}
+with(Card_Game, plot(Winings,Probability))
+```
+
+The graph shows our distribution of probabilities. To find the expected value, we simply have to compute the average value which is done by summing up the values muliplied by their corresponding probability.
+
+`r  Card_Game$MultProb <- Card_Game$Winings * Card_Game$Probability`
+`r Card_avg <-sum(Card_Game$MultProb)`
+> Expected Value = `r Card_avg`
+
+Similarily we can find the variance:
+`r Card_Game$Var_Diff <- (Card_Game$Winings - Card_avg)^2 * Card_Game$Probability`
+`r Variance <- sum(Card_Game$Var_Diff)`
+> Variance = `r Variance`
+
+And to find the standard deviation of that we simply find the square root:
+  
+> Standard Deviation = `r sqrt(Variance)`
+
+A summary of the calculations are given here, and we can see the expected value and the variance are obtained by summing the MultProb and the Var_Diff columns respectively.
+```{r} 
+Card_Game
+
+```
+
+b. As I am not much of a gambling man, I wouldn't pay anything for this game. However, given the expected Value to be roughly 4 dollars, I would love if the Casino (or whoever made this game), would charge that price. However, to give themselves the advantage, I assume they would charge 5 dollars a game, which after many many games, they would pull out ahead, which is how all table games are designed. 
+
+#### Problem 2: 2.40 Baggage Fees
+a. As this was a similar problem to the first, I created a similar data frame to help solve and calculate the answers:
+```{r} 
+Bag <-c("No Bags","1 Bag","2 Bag")
+Cost<-c(0,25,60)
+Probability <-c(.54,.34,.12)
+Bags <-data.frame(Bag,Cost,Probability)
+Bags
+```
+
+```{r}
+with(Bags, plot(Cost,Probability))
+```
+
+The graph shows our distribution of probabilities. To find the expected value, we simply have to compute the average value which is done by summing up the values muliplied by their corresponding probability.
+
+`r Bags$MultProb <- Bags$Cost * Bags$Probability`
+`r Bag_avg <-sum(Bags$MultProb)`
+> Expected Value = $`r round(Bag_avg, 2)`
+
+Similarily we can find the variance:
+`r Bags$Var_Diff <- (Bags$Cost - Bag_avg)^2 * Bags$Probability`
+`r Variance <- sum(Bags$Var_Diff)`
+> Variance = `r Variance`
+
+And to find the standard deviation of that we simply find the square root:
+`r std_dev <- sqrt(Variance)`
+> Standard Deviation = `r std_dev`
+
+A summary of the calculations are given here, and we can see the expected value and the variance are obtained by summing the MultProb and the Var_Diff columns respectively.
+```{r} 
+Bags
+
+```
+
+b. We can simply compute the expected value from a flight of 120 people by multiplying the number of people by the expected value.
+
+> Expected Value for 120 Passagners = $`r round(120*Bag_avg,2)`
+
+
+Some assumptions we are making are in regards to the flight itself. We have to assume that this flight is an average flight (ie. not an international flight that may exist outside the norm). Furthermore, it safe to assume that the standard deviation for this flight would be the same to the calculated standard deviation previously of 19.95
+
+
+#### Problem 3: Selling on Ebay
+a. For the first part of this to calculate the Net Profit we simply add the two expected values together:
+`r game <- 38`
+`r text <- 110`
+> E(X) + E(Y) = $38 - $110 = `r game - text`
+
+To calculate the standard deviation we need to find the variance of the two:
+`r game_var <- 5^2`
+`r text_var <- 4^2`
+
+> Standard Deviation = $$ \sqrt(Var(Game)  * (1)^2 + Var(Text) * (-1)^2)$$     
+> Standard Deviation = $`r round(sqrt(game_var + text_var),2)`
+
+b. For this we would simply use the variable in the equation and replace it with 10% or 0.10
+`r com <- 0.10`
+> Expected Value = $$ a*E(Text)$$
+> Expected Value = $`r text * com`
+
+The Standard deviation would be calculated similar with the following equation:      
+
+> Standard Deviation = $$ \sqrt(a^2 * Var(Text))$$
+> Standard Deviation = `r sqrt(com^2 * text_var)`
+
+#### Problem 4: 2.46 Income and Gender 
+
+a. For this problem a the data from the table was recreated in the following data set: 
+
+```{r}
+
+Income <- c("$1 to $9,999","$10,000 to $14,999","$15,000 to $24,999","$25,000 to $34,999","$35,000 to $49,999","$50,000 to $64,999","$65,000 to $74,999","$75,000 to $99,999","$100,000 & Up")
+Total <- c(.022,.047,.158,.183,.212,.139,.058,.084,.097)
+Personal_Income <-data.frame(Income,Total)
+Personal_Income
+```
+
+Which gives a distribution like this:
+```{r} 
+with(Personal_Income, barplot(Total, main = "Income Distribution", names.arg=Income))
+```
+
+b. To calculate the probablity of a US resident making less that $50,000, we simple have to add up the probablities:
+`r income_p <- sum(Personal_Income$Total[1:5])`
+> Probabilty of Making Less Than $50,000 = `r income_p`
+
+c. Similarly we can solve this probability by mulitplying the probabilites. This is assuming the events are independent:
+
+> P(>$50,000 and Female) = `r income_p * 0.41`
+
+d. The fact that 71% of females make less than $50,000 voids our previous assumption that the two events are independent. The probabilty of making less than GIVEN being female should be eqaul to the probailty of making less than 50,000. Since 71% doesn't equal the 62% calculated previously, our assumptions is invalid. 
